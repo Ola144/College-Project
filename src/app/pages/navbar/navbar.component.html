@@ -9,9 +9,9 @@
         <div class="collapse navbar-collapse" id="mynavbar">
             <ul class="navbar-nav me-auto">
                 @if (loggedUser.role == 'main') {
-                <li class="nav-item text-white fw-bold" routerLink="/user-list"
-                    routerLinkActive="py-1 px-2 bg-primary rounded text-light">
-                    <a class="nav-link text-light fw-bold">Users</a>
+                <li class="nav-item text-white fw-bold">
+                    <a routerLink="/users" routerLinkActive="py-1 px-2 bg-primary rounded text-light"
+                        class="nav-link text-light fw-bold">Users</a>
                 </li>
                 }
                 <li class="nav-item">

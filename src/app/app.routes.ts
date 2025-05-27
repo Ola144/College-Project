@@ -22,7 +22,7 @@ export const routes: Routes = [
         canActivate: [canActivateCollegeProjectGuard],
         children: [
             {
-                path: 'user-list',
+                path: 'users',
                 component: UserListComponent,
                 resolve: {users: canResolveUsersGuard}
             },

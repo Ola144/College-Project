@@ -1,0 +1,72 @@
+<div class="w-100" style="background: #080710; min-height: 100%;">
+    <div class="position-absolute"
+        style="width: 430px; height: 520px; transform: translate(-50%,-50%); left: 50%; top: 50%">
+        <div class="position-absolute rounded-circle shadow-lg shadow-green-500/50"
+            style="width: 200px; height: 200px; background: linear-gradient(#1845ad, #23a2f6); left: -80px; top: -60px;">
+        </div>
+        <div class="position-absolute rounded-circle shadow-lg shadow-red-500/50"
+            style="width: 200px; height: 200px; background: linear-gradient(to right, #ff512f, #f09819); right: -50px; bottom: -60px;">
+        </div>
+    </div>
+    <form #loginForm="ngForm" class="position-absolute rounded backdrop-blur-xs border border-light shadow py-4 px-2"
+        style="transform: translate(-50%, -50%); top: 50%; left: 50%; width: 400px; height: 520px; background: rgba(0, 0, 0, 0.5);">
+        <h3 class="fs-2 text-white fw-bold text-center">Login Here</h3>
+
+        <label for="username" class="mt-4 fs-4 fw-bold text-white form-label">Username</label>
+        <input class="form-control w-full bg-light rounded py-2 px-2 text-md fw-bold"
+            style="input::placeholder{ color: #faf1f1}" type="text" placeholder="Username" id="username" name="userName"
+            [(ngModel)]="loginObj.userName" required #userName="ngModel"
+            [class]="userName.invalid && userName.touched ? 'is-invalid': ''">
+        @if (userName.invalid && userName.touched) {
+        <div class="text-danger">
+            @if (userName.errors?.['required']) {
+            <span>*Username is a required field!</span>
+            }
+        </div>
+        }
+
+        <label for="password" class="mt-4 fs-4 fw-bold text-white form-label">Password</label>
+        <div class="position-relative">
+            <input class="form-control w-full bg-light rounded py-2 px-2 text-md fw-bold"
+                style="input::placeholder{ color: #faf1f1}" type="password" placeholder="Password" id="password"
+                #loginPassword name="password" [(ngModel)]="loginObj.password" required #password="ngModel"
+                [class]="password.invalid && password.touched ? 'is-invalid': ''">
+            @if (password.invalid && password.touched) {
+            <div class="text-danger">
+                @if (password.errors?.['required']) {
+                <span>*Password is a required field!</span>
+                }
+            </div>
+            }
+            <i class="fa fa-eye-slash text-white py-2 px-2 rounded-end"
+                style="background-color: #080710; position: absolute; top: 0;  right: 0; height: 42px;"
+                (click)="showPassword()"></i>
+            @if (isShowIconVisible) {
+            <i class="fa fa-eye text-white py-2 px-2 rounded-end"
+                style="background-color: #080710; position: absolute; top: 0;  right: 0; height: 42px;"
+                (click)="showPassword()"></i>
+            }
+        </div>
+
+        @if (!isLoginLoading) {
+        <button type="button" class="btn btn-outline-light mt-4 w-100 py-2 px-0 fs-5 fw-bold rounded" (click)="login()"
+            [disabled]="loginForm.invalid" [class]="loginForm.invalid ? 'cursor-not-allowed' : 'cursor-pointer'">
+            Log In
+        </button>
+        } @else {
+        <button class="bg-secondary text-light mt-4 w-100 py-2 px-0 fs-5 fw-bold rounded cursor-not-allowed" disabled>
+            <span class="spinner-border spinner-border-sm"></span>
+            Loading..
+        </button>
+        }
+
+        <div class="mt-5 d-flex justify-content-between w-full">
+            <div class="bg-red width-24 rounded py-2 px-2 text-secondary fw-bold bg-light text-center cursor-pointer">
+                <i class="fa fa-google"></i> Google
+            </div>
+            <div class="bg-red width-24 rounded py-2 px-2 text-secondary fw-bold bg-light text-center cursor-pointer">
+                <i class="fa fa-facebook"></i> Facebook
+            </div>
+        </div>
+    </form>
+</div>

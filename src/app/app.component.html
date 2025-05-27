@@ -1,0 +1,12 @@
+<router-outlet />
+
+@if(isLoaderVisible){
+<div class="h-100 w-100 position-absolute top-0 left-0 loader" style="background: rgba(0, 0, 0, 0.7); z-index: 50;">
+    <div class="h-100 d-flex justify-content-center align-items-center">
+        <div class="p-3 bg-primary text-light rounded" disabled>
+            <span class="spinner-border spinner-border-sm"></span>
+            Loading..
+        </div>
+    </div>
+</div>
+}

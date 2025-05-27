@@ -1,0 +1,74 @@
+<div class="my-auto mx-auto" style="max-width: 60%; ">
+    <h2 class="text-dark text-center fw-bold mb-2">Create New User</h2>
+    <form class="bg-black p-4 rounded" #userForm="ngForm">
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label for="fullName" class="form-label text-white fw-bold">Full Name</label>
+                <input type="text" class="form-control" [(ngModel)]="userObj.fullName" placeholder="First Name"
+                    name="fullName" id="fullName" required #fullName="ngModel"
+                    [class]="fullName.invalid && fullName.touched ?'is-invalid':''">
+                @if (fullName.invalid && fullName.touched) {
+                <div class="text-danger">
+                    @if (fullName.errors?.['required']) {
+                    <span>*Full name is a required field!</span>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-md-6 mb-2">
+                <label for="userName" class="form-label text-white fw-bold">User Name</label>
+                <input type="text" class="form-control" [(ngModel)]="userObj.userName" placeholder="Middle Name"
+                    name="userName" id="userName" required #userName="ngModel"
+                    [class]="userName.invalid && userName.touched ?'is-invalid':''">
+                @if (userName.invalid && userName.touched) {
+                <div class="text-danger">
+                    @if (userName.errors?.['required']) {
+                    <span>*User name is a required field!</span>
+                    }
+                </div> }
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6 mb-2">
+                <label for="emailId" class="form-label text-white fw-bold">Email</label>
+                <input type="text" class="form-control" [(ngModel)]="userObj.emailId" placeholder="Email" name="emailId"
+                    id="emailId" required email #emailId="ngModel"
+                    [class]="emailId.invalid && emailId.touched ?'is-invalid':''">
+                @if (emailId.invalid && emailId.touched) {
+                <div class="text-danger">
+                    @if (emailId.errors?.['required']) {
+                    <span>*Email is a required field!</span>
+                    }
+                    @if (emailId.errors?.['email']) {
+                    <span>*Please provide a valid email address!</span>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-md-6 mb-2">
+                <label for="password" class="form-label text-white fw-bold">Password</label>
+                <input type="text" id="password" class="form-control" [(ngModel)]="userObj.password"
+                    placeholder="Password" name="password" required #password="ngModel"
+                    [class]="password.invalid && password.touched ?'is-invalid':''">
+                @if (password.invalid && password.touched) {
+                <div class="text-danger">
+                    @if (password.errors?.['required']) {
+                    <span>*Password is a required field!</span>
+                    }
+                </div>
+                }
+            </div>
+        </div>
+        @if(!isCreateUserLoading) {
+        <button class="btn btn-primary w-100 mt-3" (click)="addUser()" [disabled]="userForm.invalid">Create
+            User</button>
+        } @else {
+        <button class="btn btn-primary w-100 mt-3 cursor-not-allowed" disabled>
+            <span class="spinner-border spinner-border-sm"></span>
+            Loading..
+        </button>
+        }
+
+
+    </form>
+</div>

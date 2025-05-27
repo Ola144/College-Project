@@ -1,0 +1,32 @@
+.nav-link:hover {
+    transition: all 0.5s ease;
+    color: rgb(25, 118, 205);
+}
+
+.userSpan {
+    position: absolute;
+    right: 100px;
+    top: 10px;
+}
+
+.userSpan div {
+    display: none;
+    transition: all 1s ease;
+}
+
+.userSpan:hover div {
+    display: block;
+    transition: all 1s ease;
+}
+
+.navbar {
+    z-index: 20;
+}
+
+@media (max-width: 575px) {
+    .userSpan {
+        position: absolute;
+        right: 70px;
+        top: 10px;
+    }
+}

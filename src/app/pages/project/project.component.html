@@ -1,0 +1,446 @@
+<div class="container-fluid mx">
+    <div class="d-flex justify-content-between align-items-center mb-2 mt-2 border-b-primary">
+        <h3 class="text-primary fs-2 fw-bold">Projects</h3>
+        <div>
+            @if(isAllProjectBtnVisible){
+            <button class="btn btn-primary btn-sm me-2" (click)="getAllProject()">All Project</button>
+            }
+            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#projectModal"
+                (click)="isProjectFormVisible = true">Submit
+                Project</button>
+        </div>
+
+    </div>
+    <div class="my-2 mx-auto" style="width: 400px;">
+        <input type="text" class="form-control mr-2" #inputValue (input)="applySearch(inputValue.value)"
+            placeholder="Search with project title or student name...">
+    </div>
+    <div class="row">
+        @for (item of filteredProject; track $index) {
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-6"><span class="text-info fw-bold">Project Title: </span> {{item.projectTitle}}
+                        </div>
+                        <div class="col-6"><span class="text-info fw-bold">Student Name: </span> {{item.studentName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6"><span class="text-secondary fw-bold">Deparment: </span> {{item.department}}
+                        </div>
+                        <div class="col-6"><span class="text-secondary fw-bold">Cource: </span> {{item.course}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><span class="text-secondary fw-bold">Contact No: </span> {{item.contactNo}}
+                        </div>
+                        <div class="col-6"><span class="text-secondary fw-bold">Email Id: </span> {{item.emailId}}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-sm btn-warning" (click)="onEdit(item)" data-bs-toggle="modal"
+                            data-bs-target="#projectModal">Edit</button>
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#myModal"
+                            (click)="projectDetails(item)">View Details</button>
+                        <button class="btn btn-sm btn-danger" (click)="onDelete(item.submissionId)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+        @if (isProjejectExist) {
+        <div class="w-100 h-100 text-center text-danger d-flex justify-content-center">
+            <p class="h-100">The project or student doesn't exist.</p>
+        </div>
+        }
+
+        @if (userProjectList.length == 0) {
+        <div class="w-100 h-100 text-center text-danger d-flex justify-content-center">
+            <p class="h-100">You've not submit any project yet.</p>
+        </div>
+        }
+    </div>
+</div>
+
+<!-- The Project Details Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Project Detail</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Project Title: </span>
+                        {{projectDetail?.projectTitle}}
+                    </div>
+                    <div class="col-6"><span class="text-info fw-bold">Student Name: </span>
+                        {{projectDetail?.studentName}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Deparment: </span> {{projectDetail?.department}}
+                    </div>
+                    <div class="col-6"><span class="text-info fw-bold">Course: </span> {{projectDetail?.course}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Contact No: </span> {{projectDetail?.contactNo}}
+                    </div>
+                    <div class="col-6"><span class="text-info fw-bold">Email: </span> {{projectDetail?.emailId}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Status: </span> {{projectDetail?.status}}
+                    </div>
+                    <div class="col-6"><span class="text-info fw-bold">Technologies: </span>
+                        {{projectDetail?.technologies}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Start Date: </span>
+                        {{projectDetail?.startDate | date}}
+                    </div>
+                    <div class="col-6"><span class="text-info fw-bold">End Date: </span>
+                        {{projectDetail?.endDate | date}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Date of Submission: </span>
+                        {{projectDetail?.dateOfSubmission | date}}
+                    </div>
+                    <div class="col-6"><span class="text-info fw-bold">Synopsis Submitted: </span>
+                        @if (projectDetail?.isSynopsisSubmitted == true) {
+                        Yes
+                        } @else{
+                        No
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><span class="text-info fw-bold">Group Project: </span>
+                        @if (projectDetail?.isGroupProject == true) {
+                        Yes
+                        } @else{
+                        No
+                        }
+                    </div>
+                    @if (projectDetail?.isGroupProject == true) {
+                    <div class="col-6"><span class="text-info fw-bold">Group Members: </span>
+                        {{projectDetail?.groupMembers}}
+                    </div>
+                    }
+
+                </div>
+                <div class="row">
+                    <div class="col-12"><span class="text-info fw-bold">GitHub URL: </span> {{projectDetail?.gitHubUrl}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12"><span class="text-info fw-bold">Project Description: </span>
+                        {{projectDetail?.projectDescription}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Submit Project Modal -->
+<div class="modal" id="projectModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Create Project</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeProjectForm()"></button>
+            </div>
+
+            <div class="modal-body" [formGroup]="projectForm">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="projectTitle" class="form-label fw-bold mt-2">Project Title</label>
+                        <input type="text" id="projectTitle" class="form-control" formControlName="projectTitle"
+                            placeholder="Project Title"
+                            [class]="projectForm.get('projectTitle')?.invalid && projectForm.get('projectTitle')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('projectTitle')?.invalid && projectForm.get('projectTitle')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['projectTitle'].errors?.['required']) {
+                            <span>*Project title is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <label for="studentName" class="form-label fw-bold mt-2">Student Name</label>
+                        <input type="text" id="studentName" class="form-control" formControlName="studentName"
+                            placeholder="Student Name"
+                            [class]="projectForm.get('studentName')?.invalid && projectForm.get('studentName')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('studentName')?.invalid && projectForm.get('studentName')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['studentName'].errors?.['required']) {
+                            <span>*Student name is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="department" class="form-label fw-bold mt-2">Department</label>
+                        <input type="text" id="department" class="form-control" formControlName="department"
+                            placeholder="Department"
+                            [class]="projectForm.get('department')?.invalid && projectForm.get('department')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('department')?.invalid && projectForm.get('department')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['department'].errors?.['required']) {
+                            <span>*Department is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <label for="course" class="form-label fw-bold mt-2">Course</label>
+                        <input type="text" id="course" class="form-control" formControlName="course"
+                            placeholder="Course"
+                            [class]="projectForm.get('course')?.invalid && projectForm.get('course')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('course')?.invalid && projectForm.get('course')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['course'].errors?.['required']) {
+                            <span>*Course is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="contactNo" class="form-label fw-bold mt-2">Contact No</label>
+                        <input type="tel" id="contactNo" class="form-control" formControlName="contactNo"
+                            placeholder="Contact No"
+                            [class]="projectForm.get('contactNo')?.invalid && projectForm.get('contactNo')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('contactNo')?.invalid && projectForm.get('contactNo')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['contactNo'].errors?.['required']) {
+                            <span>*Contact No is a required field!</span>
+                            }
+                            @if (projectForm.controls['contactNo'].errors?.['min']) {
+                            <span>*Contact No should have a minimum of 10 characters!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <label for="emailId" class="form-label fw-bold mt-2">Email</label>
+                        <input type="email" id="emailId" class="form-control" formControlName="emailId"
+                            placeholder="Email"
+                            [class]="projectForm.get('emailId')?.invalid && projectForm.get('emailId')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('emailId')?.invalid && projectForm.get('emailId')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['emailId'].errors?.['required']) {
+                            <span>*Project title is a required field!</span>
+                            }
+                            @if (projectForm.controls['emailId'].errors?.['email']) {
+                            <span>*Email is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="technologies" class="form-label fw-bold mt-2">Technologies</label>
+                        <input type="text" id="technologies" class="form-control" formControlName="technologies"
+                            placeholder="Technologies"
+                            [class]="projectForm.get('technologies')?.invalid && projectForm.get('technologies')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('technologies')?.invalid && projectForm.get('technologies')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['technologies'].errors?.['required']) {
+                            <span>*Technologies is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="col-4">
+                        <label for="status" class="form-label fw-bold mt-2">Status</label>
+                        <select id="status" class="form-select" formControlName="status"
+                            [class]="projectForm.get('status')?.invalid && projectForm.get('status')?.touched ? 'is-invalid' : ''">
+                            <option value="" selected>Select Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                        @if (projectForm.get('status')?.invalid && projectForm.get('status')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['status'].errors?.['required']) {
+                            <span>*Status is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="startDate" class="form-label fw-bold mt-2">Start Date</label>
+                        <input type="date" id="startDate" class="form-control" formControlName="startDate"
+                            [class]="projectForm.get('startDate')?.invalid && projectForm.get('startDate')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('startDate')?.invalid && projectForm.get('startDate')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['startDate'].errors?.['required']) {
+                            <span>*Start date is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <label for="endDate" class="form-label fw-bold mt-2">End Date</label>
+                        <input type="date" id="endDate" class="form-control" formControlName="endDate"
+                            [class]="projectForm.get('endDate')?.invalid && projectForm.get('endDate')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('endDate')?.invalid && projectForm.get('endDate')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['endDate'].errors?.['required']) {
+                            <span>*End date is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="dateofSubmission" class="form-label fw-bold mt-2">Date of Submission</label>
+                        <input type="date" id="dateofSubmission" class="form-control" formControlName="dateOfSubmission"
+                            [class]="projectForm.get('dateOfSubmission')?.invalid && projectForm.get('dateOfSubmission')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('dateOfSubmission')?.invalid &&
+                        projectForm.get('dateOfSubmission')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['dateOfSubmission'].errors?.['required']) {
+                            <span>*Date of submission is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <label for="synopsisSubmitted" class="form-label fw-bold mt-2">Synopsis Submitted</label>
+                        <select name="" id="synopsisSubmitted" class="form-select"
+                            formControlName="isSynopsisSubmitted">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="groupProject" class="form-label fw-bold mt-2">Group Project</label>
+                        <select name="" id="groupProject" class="form-select" formControlName="isGroupProject">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label for="groupMembers" class="form-label fw-bold mt-2">Group Members</label>
+                        <input type="text" id="groupMembers" class="form-control" formControlName="groupMembers"
+                            placeholder="Group Members">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="gitHubUrl" class="form-label fw-bold mt-2">Github URL</label>
+                        <input type="text" id="gitHubUrl" class="form-control" formControlName="gitHubUrl"
+                            placeholder="Github URL"
+                            [class]="projectForm.get('gitHubUrl')?.invalid && projectForm.get('gitHubUrl')?.touched ? 'is-invalid' : ''">
+                        @if (projectForm.get('gitHubUrl')?.invalid && projectForm.get('gitHubUrl')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['gitHubUrl'].errors?.['required']) {
+                            <span>*Github URL is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="projectdescription" class="form-label fw-bold mt-2">Project Description</label>
+                        <textarea type="text" id="projectdescription" class="form-control"
+                            formControlName="projectDescription" placeholder="Project Description"
+                            [class]="projectForm.get('projectDescription')?.invalid && projectForm.get('projectDescription')?.touched ? 'is-invalid' : ''"></textarea>
+                        @if (projectForm.get('projectDescription')?.invalid &&
+                        projectForm.get('projectDescription')?.touched) {
+                        <div class="text-danger">
+                            @if (projectForm.controls['projectDescription'].errors?.['required']) {
+                            <span>*Project description is a required field!</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                @if (projectForm.get('submissionId')?.value == 0 || projectForm.get('submissionId')?.value == undefined)
+                {
+                @if(!isSubmitProjectLoading){
+                <button type="button" class="btn btn-primary" (click)="submitProject()"
+                    [disabled]="projectForm.invalid">Submit</button>
+                } @else{
+                <button class="btn btn-primary cursor-not-allowed" disabled>
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Loading..
+                </button>
+                }
+                } @else {
+                @if(!isUpdateProjectLoading){
+                <button type="button" class="btn btn-secondary" (click)="updateProject()"
+                    [disabled]="projectForm.invalid">Update</button>
+                } @else {
+                <button class="btn btn-secondary cursor-not-allowed" disabled>
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Loading..
+                </button>
+                }
+
+
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Delete Popup -->
+@if (isConfirmDelete) {
+<div class="h-100 w-100"
+    style="position: absolute; top: 0; left: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 50;">
+    <div class="d-flex justify-content-center">
+        <div class="bg-light w-60 h-20 border border-4 border-seondary rounded p-3"
+            style="transform: translateY(200%);">
+            <p class="text-dark">Are you sure want to delete the project?</p>
+            <div class="d-flex justify-content-end align-items-center gap-2">
+                <button class="btn btn-secondary btn-sm" (click)="isConfirmDelete = false"
+                    [disabled]="isDeleteProjectLoading">Cancel</button>
+                @if (!isDeleteProjectLoading) {
+                <button class="btn btn-danger btn-sm" (click)="deleteProjectById()">Delete</button>
+                } @else {
+                <button class="btn btn-danger cursor-not-allowed btn-sm" disabled>
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Loading..
+                </button>
+                }
+
+
+            </div>
+        </div>
+    </div>
+</div>
+}

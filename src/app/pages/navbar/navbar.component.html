@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark position-fixed top-0 left-0 z-50 w-100">
+    <div class="container-fluid position-relative">
+        <a class="navbar-brand bg-danger px-1 py-0  rounded-circle fw-bold" routerLink="/project">C<span
+                class="text-primary">P</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon text-light"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto">
+                @if (loggedUser.role == 'main') {
+                <li class="nav-item text-white fw-bold" routerLink="/user-list"
+                    routerLinkActive="py-1 px-2 bg-primary rounded text-light">
+                    <a class="nav-link text-light fw-bold">Users</a>
+                </li>
+                }
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-bold" routerLink="/projects"
+                        routerLinkActive="py-2 px-3 bg-primary rounded text-light">Projects</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center position-relative">
+                <button class="btn btn-danger mt-2" type="button" (click)="logout()">Log Out</button>
+            </div>
+        </div>
+        <span class="text-white fw-bold me-2 cursor-pointer userSpan">
+            User <i class="fa fa-chevron-down ms-1"></i>
+            <div class="bg-dark p-2 text-center" style="position: absolute; top: 20px; right: 0; width: 120px;">
+                <p class="text-center mb-1">
+                    <span class="fw-bold text-danger">Username:</span> {{loggedUser?.userName}}
+                </p>
+                <button type="button" class="btn btn-primary btn-sm" (click)="getYourProject()">Your
+                    Project</button>
+            </div>
+        </span>
+    </div>
+</nav>

@@ -1,0 +1,12 @@
+.loginBtn {
+    background-color: #ffffff;
+    border: none;
+    transition: all 0.2s ease-in;
+    color: gray;
+}
+
+.loginBtn:hover {
+    background: none;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}

@@ -35,7 +35,7 @@ export class MasterService {
   login(obj: LoginModel): Observable<IAPIResponse> {
     let options = {
       headers: new HttpHeaders({
-        'Access-Control-Origin': '*',
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
         authorization: 'Basic bW9iaWxlYXBpdXNlcjpwYXNzd29yZDEh'
       })

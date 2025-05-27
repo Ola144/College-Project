@@ -2,7 +2,7 @@ import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@an
 import { MasterService } from '../../service/master.service';
 import { IAPIResponse, UserModel } from '../../Model/user';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { MatLabel, MatFormFieldModule } from '@angular/material/form-field';
@@ -18,9 +18,10 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
-export class UserListComponent implements AfterViewInit {
+export class UserListComponent implements OnInit {
   masterService: MasterService = inject(MasterService);
   toastr: ToastrService = inject(ToastrService);
+  activeRoute: ActivatedRoute = inject(ActivatedRoute);
 
   userList: any;
 
@@ -30,11 +31,13 @@ export class UserListComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit(): void {
+  ngOnInit() {
+    this.userList = this.activeRoute.snapshot.data['users'];
+
     this.masterService.getAllUsers().subscribe({
       next: (res: IAPIResponse) => {
         this.userList = res.data;
-
+        
         this.dataSource = new MatTableDataSource(this.userList);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

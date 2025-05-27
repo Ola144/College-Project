@@ -54,7 +54,7 @@ export class UserModel {
         this.emailId = '';
         this.createdDate = new Date();
         this.password = '';
-        this.role = '';
+        this.role = 'Student';
         this.projectName = 'College Project';
         this.refreshToken = '';
         this.refreshTokeExpiryTime = '';

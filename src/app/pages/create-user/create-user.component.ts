@@ -29,8 +29,8 @@ export class CreateUserComponent {
         }
       },
       error: (err: IAPIResponse) => {
-        this.toastr.error(err.message);
-        this.isCreateUserLoading = false;
+          this.toastr.error(err.message);
+          this.isCreateUserLoading = false;
       }
     });
   }

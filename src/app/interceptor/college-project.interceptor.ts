@@ -2,7 +2,6 @@ import { HttpInterceptorFn } from '@angular/common/http';
 
 export const collegeProjectInterceptor: HttpInterceptorFn = (req, next) => {
   // try {
-  debugger;
   const localData = localStorage.getItem('collegeProject');
   if (localData != null) {
     const tokenData = JSON.parse(localData);

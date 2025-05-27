@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ProjectModel, IAPIResponse, LoginModel, UserModel, IProject } from '../Model/user';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent, map, merge, Observable, Observer, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,14 @@ export class MasterService {
 
   onLogin$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   onGetUserProject$: Subject<any> = new Subject<boolean>();
+  isOnline$ = merge(
+    fromEvent(window, 'online').pipe(map(() => true)),
+    fromEvent(window, 'offline').pipe(map(() => false)),
+    new Observable((sub: Observer<boolean>) => {
+      sub.next(navigator.onLine);
+      sub.complete();
+    })
+  )
 
   constructor() { }
 

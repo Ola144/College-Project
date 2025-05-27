@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MasterService } from '../../service/master.service';
 import { IAPIResponse, IProject, ProjectModel } from '../../Model/user';
 import { ToastrService } from 'ngx-toastr';
-import {CommonModule} from '@angular/common'
-import { map, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project',
@@ -16,9 +16,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class ProjectComponent implements OnInit {
   masterService: MasterService = inject(MasterService);
   toastr: ToastrService = inject(ToastrService);
+  activeRoute: ActivatedRoute = inject(ActivatedRoute);
 
   projectList: IProject[] = [];
-  userProjectList: IProject[] = [];
 
   filteredProject: IProject[] = [];
 
@@ -33,6 +33,7 @@ export class ProjectComponent implements OnInit {
   isSubmitProjectLoading: boolean = false;
   isUpdateProjectLoading: boolean = false;
   isDeleteProjectLoading: boolean = false;
+  isLoadingProject: boolean = false;
 
   loggedUser: any;
 
@@ -59,6 +60,8 @@ export class ProjectComponent implements OnInit {
         this.getProjectByUserId();
       }
     })
+
+    this.projectList = this.activeRoute.snapshot.data['projects'];
 
     this.initializeForm();
   }
@@ -91,22 +94,33 @@ export class ProjectComponent implements OnInit {
   }
 
   getAllProject() {
+    this.isLoadingProject = true;
     this.masterService.getAllProjects().subscribe({
       next: (res: any)=>{
         this.projectList = res;
+        this.isLoadingProject = false;
         this.isAllProjectBtnVisible = false;
         this.applySearch('all');
+      },
+      error: (err: any) => {
+        this.toastr.error("Something when wrong. Try again!");
+        this.isLoadingProject = false;
       }
     })
   }
 
   getProjectByUserId() {
+    this.isLoadingProject = true;
     this.masterService.getProjectByUserId(this.loggedUser.userId).subscribe({
       next: (res: any)=>{
         this.projectList = res;
-        this.userProjectList = res;
+        this.isLoadingProject = false;
         this.isAllProjectBtnVisible = true;
         this.applySearch('all');
+      },
+      error: (err: any) => {
+        this.toastr.error("Something when wrong. Try again!");
+        this.isLoadingProject = false;
       }
     })
   }
@@ -116,14 +130,15 @@ export class ProjectComponent implements OnInit {
     const formValue = this.projectForm.value;
 
     this.masterService.submitProject(formValue).subscribe({
-      next: (res: IAPIResponse) => {
-        this.toastr.success(res.message);
+      next: (res: any) => {
+        this.toastr.success("Project sumbitted successfully!");
         this.projectForm.reset();
         this.isSubmitProjectLoading = false;
         this.getAllProject();
       },
-      error: (err: IAPIResponse) => {
-        this.toastr.error(err.message);
+      error: (err: any) => {
+        this.toastr.error("Something went wrong. Please, try again!");
+        this.isSubmitProjectLoading = false;
       }
     })
   }
@@ -138,14 +153,15 @@ export class ProjectComponent implements OnInit {
     const formValue = this.projectForm.value;
 
     this.masterService.updateProject(this.projectId, formValue).subscribe({
-      next: (res: IAPIResponse) => {
-        this.toastr.success(res.message);
+      next: (res: any) => {
+        this.toastr.success("Project updated successfully!");
         this.projectForm.reset();
         this.isUpdateProjectLoading = false;
         this.getAllProject();
       },
       error: (err: IAPIResponse) => {
-        this.toastr.error(err.message);
+        this.toastr.error("Something went wrong. Please, try again!");
+        this.isUpdateProjectLoading = false;
       }
     })
   }
@@ -159,14 +175,15 @@ export class ProjectComponent implements OnInit {
   deleteProjectById() {
     this.isDeleteProjectLoading = true;
     this.masterService.deleteProjectById(this.submissionId).subscribe({
-      next: (res: IAPIResponse) => {
-        this.toastr.success(res.message);
+      next: (res: any) => {
+        this.toastr.success("Project deleted successfully!");
         this.getAllProject();
         this.isDeleteProjectLoading = false;
         this.isConfirmDelete = false;
       },
       error: (err: IAPIResponse) => {
-        this.toastr.error(err.message);
+        this.toastr.error("Something went wrong. Please, try again!");
+        this.isDeleteProjectLoading = false;
       }
     })
   }

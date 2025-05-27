@@ -52,13 +52,7 @@
         </div>
         }
 
-        @if (isProjejectExist) {
-        <div class="w-100 h-100 text-center text-danger d-flex justify-content-center">
-            <p class="h-100">The project or student doesn't exist.</p>
-        </div>
-        }
-
-        @if (userProjectList.length == 0) {
+        @if (filteredProject.length == 0) {
         <div class="w-100 h-100 text-center text-danger d-flex justify-content-center">
             <p class="h-100">You've not submit any project yet.</p>
         </div>
@@ -444,3 +438,14 @@
     </div>
 </div>
 }
+
+<!-- Loader for getting project -->
+@if(isLoadingProject){
+<div class="h-100 w-100 position-absolute top-0 left-0 loader" style="background: rgba(0, 0, 0, 0.7); z-index: 50;">
+    <div class="h-100 d-flex justify-content-center align-items-center">
+        <div class="p-3 bg-primary text-light rounded" disabled>
+            <span class="spinner-border spinner-border-sm"></span>
+            Loading..
+        </div>
+    </div>
+</div> }

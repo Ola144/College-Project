@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ProjectModel, IAPIResponse, LoginModel, UserModel, IProject } from '../Model/user';
 import { BehaviorSubject, fromEvent, map, merge, Observable, Observer, Subject } from 'rxjs';
@@ -33,7 +33,15 @@ export class MasterService {
   }
 
   login(obj: LoginModel): Observable<IAPIResponse> {
-    return this.http.post<IAPIResponse>(`${this.apiUrl}login`, obj);
+    let options = {
+      headers: new HttpHeaders({
+        'Access-Control-Origin': '*',
+        'Content-Type': 'application/json',
+        authorization: 'Basic bW9iaWxlYXBpdXNlcjpwYXNzd29yZDEh'
+      })
+    }
+
+    return this.http.post<IAPIResponse>(`${this.apiUrl}login`, obj, options);
   }
 
   addUser(obj: UserModel): Observable<IAPIResponse> {
